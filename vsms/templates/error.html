@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card center"><h1>{{ code }}</h1><h2>{{ title }}</h2><p>{{ message }}</p>
+<a class="btn" href="{{ url_for('customer.vehicles') }}">Back to vehicles</a></div>
+{% endblock %}
