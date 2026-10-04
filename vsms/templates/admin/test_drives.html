@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% from '_macros.html' import badge, csrf %}
+{% block title %}Test drive bookings{% endblock %}
+{% block content %}
+<h1>Test drive bookings</h1>
+<div class="card nopad"><table class="table">
+<tr><th>When</th><th>Customer</th><th>Vehicle</th><th>Status</th><th></th></tr>
+{% for t in drives %}<tr><td>{{ t.start_time.strftime('%d %b %Y, %H:%M') }}</td><td>{{ t.customer.name }}<br><small class="muted">{{ t.customer.phone }}</small></td>
+<td>{{ t.vehicle.title }}</td><td>{{ badge(t.status) }}</td>
+<td class="right">{% if t.status == 'booked' %}
+<form class="inline" method="post" action="{{ url_for('admin.test_drive_action', td_id=t.id, action='complete') }}">{{ csrf() }}<button class="btn small">Mark done</button></form>
+<form class="inline" method="post" action="{{ url_for('admin.test_drive_action', td_id=t.id, action='cancel') }}">{{ csrf() }}<button class="btn small danger">Cancel</button></form>{% endif %}</td></tr>
+{% else %}<tr><td colspan="5" class="muted">No bookings.</td></tr>{% endfor %}
+</table></div>
+{% endblock %}

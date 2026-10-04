@@ -1,0 +1,15 @@
+{% extends 'base.html' %}{% from '_macros.html' import csrf %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<div class="card narrow">
+  <h1>Create your account</h1>
+  <form method="post">{{ csrf() }}
+    <label>Full name<input name="name" value="{{ form.get('name','') }}" required></label>
+    <label>Email<input type="email" name="email" value="{{ form.get('email','') }}" required></label>
+    <label>Phone<input name="phone" value="{{ form.get('phone','') }}" required placeholder="10-digit mobile number"></label>
+    <label>Password<input type="password" name="password" required><small class="muted">Min 8 characters, with a letter and a digit.</small></label>
+    <button class="btn block">Register</button>
+  </form>
+  <p class="muted">Already registered? <a href="{{ url_for('auth.login') }}">Log in</a></p>
+</div>
+{% endblock %}

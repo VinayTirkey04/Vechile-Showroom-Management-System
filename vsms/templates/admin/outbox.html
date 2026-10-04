@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Email outbox{% endblock %}
+{% block content %}
+<h1>Email outbox</h1>
+{% for m in mails %}<div class="card"><b>{{ m.subject }}</b> <span class="muted small">to {{ m.to_email }} · {{ m.created_at.strftime('%d %b %Y %H:%M') }}</span><p>{{ m.body }}</p></div>
+{% else %}<div class="card">No emails.</div>{% endfor %}
+{% endblock %}

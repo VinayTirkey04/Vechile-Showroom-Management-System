@@ -1,0 +1,13 @@
+{% extends 'base.html' %}{% from '_macros.html' import csrf %}
+{% block title %}Users{% endblock %}
+{% block content %}
+<div class="between"><h1>Customers &amp; staff</h1><a class="btn" href="{{ url_for('admin.staff_new') }}">+ Add staff</a></div>
+<form class="card filters" method="get"><label>Search<input name="q" value="{{ q }}" placeholder="name, email or phone"></label><button class="btn">Search</button></form>
+<div class="card nopad"><table class="table">
+<tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Active</th><th></th></tr>
+{% for u in users %}<tr><td>{{ u.name }}</td><td>{{ u.email }}</td><td>{{ u.phone }}</td><td>{{ u.role }}</td><td>{{ 'Yes' if u.is_active_account else 'No' }}</td>
+<td class="right">
+<form class="inline" method="post" action="{{ url_for('admin.user_toggle', user_id=u.id) }}">{{ csrf() }}<button class="btn small ghost">{{ 'Deactivate' if u.is_active_account else 'Activate' }}</button></form>
+<form class="inline" method="post" action="{{ url_for('admin.user_reset', user_id=u.id) }}">{{ csrf() }}<button class="btn small ghost">Reset password</button></form></td></tr>
+{% endfor %}</table></div>
+{% endblock %}

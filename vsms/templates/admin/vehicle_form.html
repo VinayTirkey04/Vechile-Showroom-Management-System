@@ -1,0 +1,22 @@
+{% extends 'base.html' %}{% from '_macros.html' import csrf %}
+{% block title %}{{ 'Edit' if v else 'Add' }} vehicle{% endblock %}
+{% block content %}
+<h1>{{ 'Edit vehicle' if v else 'Add vehicle' }}</h1>
+<form class="card" method="post" enctype="multipart/form-data">{{ csrf() }}
+<div class="grid3">
+  <label>Vehicle number<input name="vehicle_number" value="{{ form.get('vehicle_number','') }}" required></label>
+  <label>Brand<input name="brand" value="{{ form.get('brand','') }}" required></label>
+  <label>Model<input name="model" value="{{ form.get('model','') }}" required></label>
+  <label>Variant<input name="variant" value="{{ form.get('variant','') }}"></label>
+  <label>Category<select name="category">{% for c in categories %}<option {{ 'selected' if form.get('category')==c }}>{{ c }}</option>{% endfor %}</select></label>
+  <label>Fuel<select name="fuel_type">{% for f in ['Petrol','Diesel','Electric','CNG','Hybrid'] %}<option {{ 'selected' if form.get('fuel_type')==f }}>{{ f }}</option>{% endfor %}</select></label>
+  <label>Colour<input name="color" value="{{ form.get('color','') }}"></label>
+  <label>Model year<input name="year" value="{{ form.get('year','') }}" required></label>
+  <label>Price (₹)<input name="price" value="{{ form.get('price','') }}" required></label>
+</div>
+<label>Description<textarea name="description" rows="2">{{ form.get('description','') }}</textarea></label>
+<label>Specifications<textarea name="specs" rows="3">{{ form.get('specs','') }}</textarea></label>
+<label>Image (PNG/JPG/WEBP, max 2 MB)<input type="file" name="image" accept="image/png,image/jpeg,image/webp"></label>
+<button class="btn">Save vehicle</button> <a class="btn ghost" href="{{ url_for('admin.vehicles') }}">Cancel</a>
+</form>
+{% endblock %}

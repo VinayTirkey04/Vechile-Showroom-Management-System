@@ -1,0 +1,15 @@
+digraph D1 {
+  graph [rankdir=LR, fontname="Helvetica", bgcolor="white", pad=0.3, nodesep=0.5, ranksep=1.3];
+  node [fontname="Helvetica", fontsize=10]; edge [fontname="Helvetica", fontsize=9, color="#475569"];
+  cust [label="Customer", shape=box]; admin [label="Admin", shape=box]; pg [label="Payment\nGateway", shape=box];
+  node [shape=circle, style=filled, fillcolor="#dbeafe"];
+  p1 [label="1.0\nUser &\nAccess"]; p2 [label="2.0\nVehicle\nInventory"]; p3 [label="3.0\nTest Drive\nBooking"]; p4 [label="4.0\nSales &\nBilling"]; p5 [label="5.0\nService &\nReports"];
+  node [shape=cds, style=filled, fillcolor="#f1f5f9"];
+  d1 [label="D1 Users"]; d2 [label="D2 Vehicles"]; d3 [label="D3 Test Drives"]; d4 [label="D4 Sales/Invoices"]; d5 [label="D5 Service"]; d6 [label="D6 Settings (Tax)"];
+  cust -> p1 [label="register / login"]; admin -> p1 [label="staff accounts,\npassword reset"]; p1 -> d1;
+  admin -> p2 [label="vehicle data + image"]; p2 -> d2; cust -> p2 [label="search"]; d2 -> p2;
+  cust -> p3 [label="slot"]; p3 -> d3; d2 -> p3; p3 -> cust [label="confirmation e-mail"];
+  cust -> p4 [label="order + card"]; p4 -> pg; pg -> p4; d6 -> p4; p4 -> d4; p4 -> d2 [label="status = sold"]; p4 -> cust [label="invoice"];
+  admin -> d6 [label="tax / charges"];
+  p5 -> d5; d4 -> p5; d5 -> p5; p5 -> admin [label="reports"];
+}

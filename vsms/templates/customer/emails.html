@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %}My emails{% endblock %}
+{% block content %}
+<h1>Email notifications</h1>
+<p class="muted">Messages the system sent to {{ current_user.email }} (SRS 3.4).</p>
+{% for m in mails %}<div class="card"><b>{{ m.subject }}</b> <span class="muted small">{{ m.created_at.strftime('%d %b %Y %H:%M') }}</span><p>{{ m.body }}</p></div>
+{% else %}<div class="card">No emails yet.</div>{% endfor %}
+{% endblock %}

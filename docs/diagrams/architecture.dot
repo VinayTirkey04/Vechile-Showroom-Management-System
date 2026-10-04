@@ -1,0 +1,31 @@
+digraph ARCH {
+  graph [rankdir=TB, fontname="Helvetica", bgcolor="white", pad=0.3, nodesep=0.45, ranksep=0.6, compound=true];
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, margin="0.2,0.1"];
+  edge [fontname="Helvetica", fontsize=9, color="#475569"];
+
+  browser [label="Web browser\n(Customer / Admin / Sales / Service)", fillcolor="#e0e7ff"];
+  subgraph cluster_web { label="Presentation layer (Flask)"; style="rounded,dashed"; color="#1d4ed8"; fontname="Helvetica";
+    tpl [label="Jinja2 templates + CSS", fillcolor="#dbeafe"];
+    r1 [label="auth routes\n/login /register /profile", fillcolor="#dbeafe"];
+    r2 [label="customer routes\n/vehicles /purchase /my/*", fillcolor="#dbeafe"];
+    r3 [label="admin routes\n/admin/*", fillcolor="#dbeafe"];
+    r4 [label="service routes\n/service", fillcolor="#dbeafe"];
+    sec [label="Cross-cutting security\nCSRF · RBAC · headers · login manager", fillcolor="#fee2e2"];
+  }
+  subgraph cluster_logic { label="Business layer"; style="rounded,dashed"; color="#0f766e"; fontname="Helvetica";
+    svc [label="services.py\nvalidation · search · pricing · booking\npurchase · service · reports", fillcolor="#ccfbf1"];
+    pay [label="payment.py\nmock gateway (Luhn, expiry, CVV)", fillcolor="#ccfbf1"];
+    mail [label="notify()\ne-mail outbox", fillcolor="#ccfbf1"];
+  }
+  subgraph cluster_data { label="Data layer"; style="rounded,dashed"; color="#475569"; fontname="Helvetica";
+    orm [label="SQLAlchemy models", fillcolor="#e2e8f0"];
+    db [label="SQLite (default)\nMySQL via DATABASE_URL", shape=cylinder, fillcolor="#f1f5f9"];
+    files [label="instance/uploads\nvehicle images", shape=folder, fillcolor="#f1f5f9"];
+  }
+  browser -> r1; browser -> r2; browser -> r3; browser -> r4;
+  r1 -> svc; r2 -> svc; r3 -> svc; r4 -> svc;
+  r1 -> tpl [style=dashed]; r2 -> tpl [style=dashed];
+  sec -> r1 [style=dotted, arrowhead=none]; sec -> r3 [style=dotted, arrowhead=none];
+  svc -> pay; svc -> mail; svc -> orm; mail -> orm; orm -> db;
+  r3 -> files [style=dashed, label="image upload"];
+}

@@ -1,0 +1,20 @@
+digraph UC {
+  graph [rankdir=LR, fontname="Helvetica", bgcolor="white", pad=0.3, nodesep=0.25, ranksep=1.6, splines=line];
+  node [fontname="Helvetica", fontsize=11];
+  edge [color="#475569", arrowhead=none];
+  cust [label="Customer", shape=box, style="filled,rounded", fillcolor="#dbeafe"];
+  staff [label="Sales Staff", shape=box, style="filled,rounded", fillcolor="#fef3c7"];
+  admin [label="Administrator", shape=box, style="filled,rounded", fillcolor="#fecaca"];
+  svc [label="Service Staff", shape=box, style="filled,rounded", fillcolor="#bbf7d0"];
+  subgraph cluster_sys { label="Vehicle Showroom Management System"; style="rounded"; color="#1d4ed8"; fontname="Helvetica";
+    node [shape=ellipse, style=filled, fillcolor="#f8fafc"];
+    u1 [label="Register / Login"]; u2 [label="Search & View Vehicle"]; u3 [label="Book / Reschedule /\nCancel Test Drive"];
+    u4 [label="Purchase Vehicle\n& Pay Online"]; u5 [label="View Booking, Purchase\n& Service History"];
+    a1 [label="Manage Vehicles & Pricing"]; a2 [label="Manage Customers & Users"]; a3 [label="Configure Tax / Charges"];
+    a4 [label="Generate Sales Reports"]; s1 [label="Manage Test-Drive Bookings"]; v1 [label="Maintain Service Records"];
+  }
+  cust -> u1; cust -> u2; cust -> u3; cust -> u4; cust -> u5;
+  staff -> u1; staff -> s1; staff -> a4;
+  admin -> a1; admin -> a2; admin -> a3; admin -> a4; admin -> s1; admin -> v1;
+  svc -> u1; svc -> v1;
+}
