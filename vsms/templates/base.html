@@ -1,0 +1,50 @@
+{% from '_macros.html' import csrf %}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Vehicle Showroom{% endblock %} · VSMS</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="{{ url_for('customer.vehicles') }}">🚘 <b>VSMS</b> <span>Vehicle Showroom</span></a>
+  <nav>
+    <a href="{{ url_for('customer.vehicles') }}">Vehicles</a>
+    {% if current_user.is_authenticated %}
+      {% if current_user.role == 'customer' %}
+        <a href="{{ url_for('customer.bookings') }}">Test Drives</a>
+        <a href="{{ url_for('customer.history') }}">My Purchases</a>
+        <a href="{{ url_for('customer.emails') }}">Emails</a>
+      {% endif %}
+      {% if current_user.role in ('admin','sales') %}
+        <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('admin.test_drives') }}">Bookings</a>
+        <a href="{{ url_for('admin.sales') }}">Sales</a>
+      {% endif %}
+      {% if current_user.role == 'admin' %}
+        <a href="{{ url_for('admin.vehicles') }}">Inventory</a>
+        <a href="{{ url_for('admin.customers') }}">Users</a>
+        <a href="{{ url_for('admin.settings') }}">Pricing</a>
+      {% endif %}
+      {% if current_user.role in ('admin','service') %}
+        <a href="{{ url_for('service.records') }}">Service</a>
+      {% endif %}
+      <a href="{{ url_for('auth.profile') }}" class="user">{{ current_user.name }} <small>({{ current_user.role }})</small></a>
+      <form method="post" action="{{ url_for('auth.logout') }}" class="inline">{{ csrf() }}<button class="link">Logout</button></form>
+    {% else %}
+      <a href="{{ url_for('auth.login') }}">Login</a>
+      <a href="{{ url_for('auth.register') }}" class="btn small">Register</a>
+    {% endif %}
+  </nav>
+</header>
+<main class="container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}<div class="alert a-{{ cat }}" role="alert">{{ msg }}</div>{% endfor %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+<footer>Vehicle Showroom Management System · SE Lab Project · Xavier Institute of Engineering</footer>
+</body>
+</html>

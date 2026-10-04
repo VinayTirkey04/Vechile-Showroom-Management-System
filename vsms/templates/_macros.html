@@ -1,0 +1,20 @@
+{% macro csrf() %}<input type="hidden" name="_csrf" value="{{ csrf_token() }}">{% endmacro %}
+
+{% macro car_img(v, cls='') %}
+{% set palette = {'Red':'#dc2626','White':'#cbd5e1','Silver':'#94a3b8','Blue':'#2563eb','Grey':'#64748b','Black':'#1e293b','Teal':'#0d9488','Green':'#16a34a','Orange':'#ea580c'} %}
+{% if v.image_filename %}
+<img class="car-img {{ cls }}" src="{{ url_for('customer.uploads', filename=v.image_filename) }}" alt="{{ v.title }}">
+{% else %}
+<div class="car-img placeholder {{ cls }}" style="color: {{ palette.get(v.color, '#475569') }}">
+<svg viewBox="0 0 200 90" role="img" aria-label="{{ v.title }}">
+<path d="M8 64 L20 44 Q28 32 50 30 L86 28 Q104 12 130 12 L152 14 Q170 20 178 40 L192 46 Q198 50 198 62 L198 68 L8 68 Z" fill="currentColor"/>
+<path d="M92 30 Q106 18 128 18 L146 20 Q158 24 164 38 L96 38 Z" fill="#e2e8f0" opacity=".85"/>
+<circle cx="52" cy="68" r="14" fill="#0f172a"/><circle cx="52" cy="68" r="6" fill="#94a3b8"/>
+<circle cx="154" cy="68" r="14" fill="#0f172a"/><circle cx="154" cy="68" r="6" fill="#94a3b8"/>
+</svg></div>
+{% endif %}
+{% endmacro %}
+
+{% macro badge(status) %}
+<span class="badge b-{{ status }}">{{ status.replace('_',' ')|title }}</span>
+{% endmacro %}
