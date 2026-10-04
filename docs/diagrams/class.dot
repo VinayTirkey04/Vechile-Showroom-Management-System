@@ -1,0 +1,20 @@
+digraph CLS {
+  graph [rankdir=TB, fontname="Helvetica", bgcolor="white", pad=0.3, nodesep=0.5, ranksep=0.7];
+  node [shape=record, fontname="Helvetica", fontsize=10, style=filled, fillcolor="#f8fafc"];
+  edge [fontname="Helvetica", fontsize=9, color="#475569"];
+  User [label="{User|id : int\lname : str\lemail : str\lphone : str\lpassword_hash : str\lrole : customer/admin/sales/service\lis_active_account : bool\l|set_password()\lcheck_password()\l}"];
+  Vehicle [label="{Vehicle|id : int\lvehicle_number : str\lbrand, model, variant : str\lcategory : Hatchback/Sedan/SUV/EV\lyear : int\lprice : int\lstatus : available/sold\limage_filename : str\l|is_available\ltitle\l}"];
+  TestDrive [label="{TestDrive|id : int\lstart_time, end_time : datetime\lstatus : booked/cancelled/completed\l|book / reschedule / cancel\l}"];
+  Sale [label="{Sale|id : int\lbase_price, tax_rate : int\ltax_amount, handling_charge : int\ltotal : int\lpayment_ref, card_last4 : str\l|}"];
+  Invoice [label="{Invoice|id : int\linvoice_number : str\lissued_at : datetime\l|}"];
+  Service [label="{ServiceRecord|id : int\ldescription : str\lservice_date : date\lstatus : scheduled/in_progress/completed\lcost : int\l|}"];
+  Setting [label="{Setting|key : str\lvalue : str\l|get_pricing_config()\lupdate_pricing_config()\l}"];
+  Notif [label="{Notification|to_email, subject, body\l|notify()\l}"];
+  User -> TestDrive [label="1 .. *  books", arrowhead=odiamond, dir=back];
+  Vehicle -> TestDrive [label="1 .. *", arrowhead=odiamond, dir=back];
+  User -> Sale [label="1 .. *  buys", arrowhead=odiamond, dir=back];
+  Vehicle -> Sale [label="1 .. 0..1", arrowhead=none];
+  Sale -> Invoice [label="1 .. 1", arrowhead=diamond, dir=back];
+  Sale -> Service [label="1 .. *", arrowhead=odiamond, dir=back];
+  User -> Notif [style=dashed, label="receives", arrowhead=vee];
+}

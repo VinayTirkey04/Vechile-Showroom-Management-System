@@ -1,0 +1,37 @@
+digraph ER {
+  graph [rankdir=LR, fontname="Helvetica", bgcolor="white", pad=0.3, nodesep=0.5, ranksep=1.0];
+  node [shape=plaintext, fontname="Helvetica", fontsize=11];
+  edge [fontname="Helvetica", fontsize=10, color="#475569", arrowhead=crow, arrowtail=none, dir=both, arrowtail=tee];
+
+  users [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#1d4ed8"><font color="white"><b>users</b></font></td></tr>
+    <tr><td align="left"><b>PK</b> id<br align="left"/>name<br align="left"/>email (unique)<br align="left"/>phone<br align="left"/>password_hash<br align="left"/>role<br align="left"/>is_active_account<br align="left"/></td></tr></table>>];
+  vehicles [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#1d4ed8"><font color="white"><b>vehicles</b></font></td></tr>
+    <tr><td align="left"><b>PK</b> id<br align="left"/>vehicle_number (unique)<br align="left"/>brand, model, variant<br align="left"/>category, fuel_type, color<br align="left"/>year, price<br align="left"/>image_filename<br align="left"/>status<br align="left"/></td></tr></table>>];
+  test_drives [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#0f766e"><font color="white"><b>test_drives</b></font></td></tr>
+    <tr><td align="left"><b>PK</b> id<br align="left"/><b>FK</b> user_id<br align="left"/><b>FK</b> vehicle_id<br align="left"/>start_time, end_time<br align="left"/>status<br align="left"/></td></tr></table>>];
+  sales [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#0f766e"><font color="white"><b>sales</b></font></td></tr>
+    <tr><td align="left"><b>PK</b> id<br align="left"/><b>FK</b> user_id<br align="left"/><b>FK</b> vehicle_id (unique)<br align="left"/>base_price, tax_rate, tax_amount<br align="left"/>handling_charge, total<br align="left"/>payment_ref, card_last4<br align="left"/></td></tr></table>>];
+  invoices [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#0f766e"><font color="white"><b>invoices</b></font></td></tr>
+    <tr><td align="left"><b>PK</b> id<br align="left"/><b>FK</b> sale_id (unique)<br align="left"/>invoice_number (unique)<br align="left"/>issued_at<br align="left"/></td></tr></table>>];
+  service_records [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#0f766e"><font color="white"><b>service_records</b></font></td></tr>
+    <tr><td align="left"><b>PK</b> id<br align="left"/><b>FK</b> sale_id<br align="left"/><b>FK</b> created_by<br align="left"/>description, service_date<br align="left"/>status, cost<br align="left"/></td></tr></table>>];
+  settings [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#64748b"><font color="white"><b>settings</b></font></td></tr>
+    <tr><td align="left"><b>PK</b> key<br align="left"/>value (tax_rate, handling_charge)<br align="left"/></td></tr></table>>];
+  notifications [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#64748b"><font color="white"><b>notifications</b></font></td></tr>
+    <tr><td align="left"><b>PK</b> id<br align="left"/>to_email, subject, body<br align="left"/>created_at<br align="left"/></td></tr></table>>];
+
+  users -> test_drives [label="books"];
+  vehicles -> test_drives [label="booked for"];
+  users -> sales [label="buys"];
+  vehicles -> sales [label="sold as", arrowhead=tee];
+  sales -> invoices [label="billed by", arrowhead=tee];
+  sales -> service_records [label="serviced"];
+}
