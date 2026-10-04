@@ -1,0 +1,20 @@
+{% extends 'base.html' %}{% from '_macros.html' import badge, csrf %}
+{% block title %}My test drives{% endblock %}
+{% block content %}
+<h1>My test drives</h1>
+<div class="card nopad"><table class="table">
+<tr><th>Vehicle</th><th>When</th><th>Status</th><th>Manage</th></tr>
+{% for t in drives %}
+<tr><td><a href="{{ url_for('customer.vehicle_detail', vehicle_id=t.vehicle_id) }}">{{ t.vehicle.title }}</a></td>
+<td>{{ t.start_time.strftime('%d %b %Y, %H:%M') }} – {{ t.end_time.strftime('%H:%M') }}</td>
+<td>{{ badge(t.status) }}</td>
+<td>{% if t.status == 'booked' %}
+  <form class="inline" method="post" action="{{ url_for('customer.reschedule', td_id=t.id) }}">{{ csrf() }}
+    <input type="datetime-local" name="start_time" required><button class="btn small ghost">Reschedule</button></form>
+  <form class="inline" method="post" action="{{ url_for('customer.cancel', td_id=t.id) }}">{{ csrf() }}
+    <button class="btn small danger">Cancel</button></form>
+{% else %}—{% endif %}</td></tr>
+{% else %}<tr><td colspan="4" class="muted">No test drives yet. Pick a vehicle and book one!</td></tr>
+{% endfor %}
+</table></div>
+{% endblock %}
