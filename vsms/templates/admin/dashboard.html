@@ -1,0 +1,20 @@
+{% extends 'base.html' %}{% from '_macros.html' import badge %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Showroom dashboard</h1>
+<div class="stats">
+  <div class="stat"><span>Vehicles sold</span><b>{{ report.count }}</b></div>
+  <div class="stat"><span>Revenue</span><b>{{ report.revenue|inr }}</b></div>
+  <div class="stat"><span>Tax collected</span><b>{{ report.tax|inr }}</b></div>
+  <div class="stat"><span>Service jobs</span><b>{{ service.count }}</b></div>
+</div>
+<div class="grid2">
+  <div class="card"><h3>Inventory by category</h3>
+    <table class="table"><tr><th>Category</th><th>Available</th><th>Sold</th></tr>
+    {% for cat, c in inv.items() %}<tr><td>{{ cat }}</td><td>{{ c.available }}</td><td>{{ c.sold }}</td></tr>{% endfor %}</table></div>
+  <div class="card"><h3>Upcoming test drives</h3>
+    <table class="table"><tr><th>When</th><th>Customer</th><th>Vehicle</th></tr>
+    {% for t in upcoming %}<tr><td>{{ t.start_time.strftime('%d %b, %H:%M') }}</td><td>{{ t.customer.name }}</td><td>{{ t.vehicle.brand }} {{ t.vehicle.model }}</td></tr>
+    {% else %}<tr><td colspan="3" class="muted">Nothing scheduled.</td></tr>{% endfor %}</table></div>
+</div>
+{% endblock %}

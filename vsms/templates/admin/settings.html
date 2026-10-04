@@ -1,0 +1,10 @@
+{% extends 'base.html' %}{% from '_macros.html' import csrf %}
+{% block title %}Pricing configuration{% endblock %}
+{% block content %}
+<div class="card narrow"><h1>Pricing configuration</h1>
+<p class="muted">Applied to every new purchase and shown on vehicle pages (DFD 1.4 Update Tax Details).</p>
+<form method="post">{{ csrf() }}
+<label>Tax rate (%)<input name="tax_rate" value="{{ rate }}" required></label>
+<label>Handling charge (₹)<input name="handling_charge" value="{{ handling }}" required></label>
+<button class="btn block">Save</button></form></div>
+{% endblock %}
