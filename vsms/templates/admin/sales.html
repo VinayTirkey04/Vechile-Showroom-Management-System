@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Sales report{% endblock %}
+{% block content %}
+<div class="between"><h1>Sales report</h1>{% if current_user.role == 'admin' %}<a class="btn ghost" href="{{ url_for('admin.sales_csv') }}">Export CSV</a>{% endif %}</div>
+<div class="stats">
+  <div class="stat"><span>Vehicles sold</span><b>{{ report.count }}</b></div>
+  <div class="stat"><span>Revenue</span><b>{{ report.revenue|inr }}</b></div>
+  <div class="stat"><span>Tax collected</span><b>{{ report.tax|inr }}</b></div>
+</div>
+<div class="grid2">
+<div class="card"><h3>By brand</h3><table class="table"><tr><th>Brand</th><th>Units</th><th class="right">Revenue</th></tr>
+{% for b, (n, amt) in report.by_brand %}<tr><td>{{ b }}</td><td>{{ n }}</td><td class="right">{{ amt|inr }}</td></tr>{% else %}<tr><td colspan="3" class="muted">No sales yet.</td></tr>{% endfor %}</table></div>
+<div class="card"><h3>By month</h3><table class="table"><tr><th>Month</th><th>Units</th><th class="right">Revenue</th></tr>
+{% for m, (n, amt) in report.by_month %}<tr><td>{{ m }}</td><td>{{ n }}</td><td class="right">{{ amt|inr }}</td></tr>{% else %}<tr><td colspan="3" class="muted">No sales yet.</td></tr>{% endfor %}</table></div>
+</div>
+<div class="card nopad"><table class="table"><tr><th>Invoice</th><th>Date</th><th>Customer</th><th>Vehicle</th><th class="right">Total</th></tr>
+{% for s in report.sales %}<tr><td><a href="{{ url_for('customer.invoice', sale_id=s.id) }}">{{ s.invoice.invoice_number }}</a></td><td>{{ s.created_at.strftime('%d %b %Y') }}</td><td>{{ s.customer.name }}</td><td>{{ s.vehicle.title }}</td><td class="right">{{ s.total|inr }}</td></tr>{% endfor %}</table></div>
+{% endblock %}

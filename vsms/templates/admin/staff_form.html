@@ -1,0 +1,12 @@
+{% extends 'base.html' %}{% from '_macros.html' import csrf %}
+{% block title %}Add staff{% endblock %}
+{% block content %}
+<div class="card narrow"><h1>Add staff account</h1>
+<form method="post">{{ csrf() }}
+<label>Full name<input name="name" value="{{ form.get('name','') }}" required></label>
+<label>Email<input type="email" name="email" value="{{ form.get('email','') }}" required></label>
+<label>Phone<input name="phone" value="{{ form.get('phone','') }}" required></label>
+<label>Role<select name="role"><option value="sales">Sales staff</option><option value="service">Service staff</option><option value="admin">Administrator</option></select></label>
+<label>Temporary password<input type="password" name="password" required></label>
+<button class="btn block">Create account</button></form></div>
+{% endblock %}
