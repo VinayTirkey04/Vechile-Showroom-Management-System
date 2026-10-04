@@ -1,0 +1,48 @@
+{% extends 'base.html' %}{% from '_macros.html' import car_img, badge, csrf %}
+{% block title %}{{ v.title }}{% endblock %}
+{% block content %}
+<a href="{{ url_for('customer.vehicles') }}" class="muted">← All vehicles</a>
+<div class="grid2 top">
+  <div>
+    <div class="card nopad">{{ car_img(v, 'big') }}</div>
+    <div class="card"><h3>Specifications</h3>
+      <table class="kv">
+        <tr><td>Vehicle no.</td><td>{{ v.vehicle_number }}</td></tr>
+        <tr><td>Category</td><td>{{ v.category }}</td></tr>
+        <tr><td>Fuel</td><td>{{ v.fuel_type }}</td></tr>
+        <tr><td>Colour</td><td>{{ v.color or '—' }}</td></tr>
+        <tr><td>Model year</td><td>{{ v.year }}</td></tr>
+      </table>
+      <p>{{ v.description }}</p>
+    </div>
+  </div>
+  <div>
+    <div class="card">
+      <h1>{{ v.title }}</h1>
+      <p>{{ badge(v.status) }}</p>
+      <table class="kv price">
+        <tr><td>Ex-showroom price</td><td>{{ price.base_price|inr }}</td></tr>
+        <tr><td>Tax ({{ price.tax_rate }}%)</td><td>{{ price.tax_amount|inr }}</td></tr>
+        <tr><td>Handling charges</td><td>{{ price.handling_charge|inr }}</td></tr>
+        <tr class="total"><td>Total payable</td><td>{{ price.total|inr }}</td></tr>
+      </table>
+      {% if v.is_available %}
+        {% if current_user.is_authenticated and current_user.role == 'customer' %}
+          <a class="btn block" href="{{ url_for('customer.purchase', vehicle_id=v.id) }}">Buy this vehicle</a>
+        {% elif not current_user.is_authenticated %}
+          <a class="btn block" href="{{ url_for('auth.login', next=request.path) }}">Log in to book or buy</a>
+        {% endif %}
+      {% else %}<div class="alert a-warning">This vehicle has been sold.</div>{% endif %}
+    </div>
+    {% if v.is_available and current_user.is_authenticated and current_user.role == 'customer' %}
+    <div class="card"><h3>Book a test drive</h3>
+      <form method="post" action="{{ url_for('customer.book_test_drive', vehicle_id=v.id) }}">{{ csrf() }}
+        <label>Date &amp; time<input type="datetime-local" name="start_time" required></label>
+        <small class="muted">Slots are 60 minutes, {{ open_hour }}:00–{{ close_hour }}:00.</small>
+        <button class="btn block">Confirm booking</button>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
