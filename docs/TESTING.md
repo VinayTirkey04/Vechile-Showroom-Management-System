@@ -23,7 +23,7 @@ To confirm the tests would actually catch bugs, three defects were injected into
 
 | Injected defect | Caught by |
 |---|---|
-| overlap check ignores the end boundary | 4 tests incl. `test_has_overlap_boundaries[11-12-False]` |
+| overlap check ignores the end boundary | 3 tests incl. `test_has_overlap_boundaries[11-12-False]` and `test_adjacent_slots_are_allowed` |
 | purchase skips the "still available" condition | `test_cannot_buy_same_vehicle_twice` |
 | tax rounded down instead of half-up | `test_calculate_price_rounds_half_up` |
 

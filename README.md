@@ -66,3 +66,15 @@ tested on SQLite only.
 * Card numbers are validated and then discarded - only the last four digits are stored.
 * No password-reset-by-email: an administrator issues a temporary password.
 * Brute-force login throttling and HTTPS termination are deployment concerns not built in here.
+
+## Publishing to GitHub
+
+Create an empty repository on GitHub (no README), then from this folder:
+
+```bash
+git remote add origin https://github.com/<your-username>/vehicle-showroom-management-system.git
+git push -u origin main develop --tags
+git push origin --all          # also pushes the feature/* and docs/* branches
+```
+
+The full project report is in `docs/VSMS_Project_Report.docx`.
