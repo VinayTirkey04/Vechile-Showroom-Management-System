@@ -1,0 +1,21 @@
+digraph FLOW {
+  graph [rankdir=TB, fontname="Helvetica", bgcolor="white", pad=0.3, nodesep=0.4, ranksep=0.45];
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, fillcolor="#dbeafe", margin="0.2,0.08"];
+  edge [fontname="Helvetica", fontsize=10, color="#475569"];
+  start [label="Customer clicks\n'Buy this vehicle'", shape=oval, fillcolor="#bbf7d0"];
+  auth [label="Authenticated customer?", shape=diamond, fillcolor="#fef3c7"];
+  deny [label="Redirect to login /\nreject (rule 5.5)", fillcolor="#fecaca"];
+  price [label="Calculate price\nbase + tax + handling  (REQ-PUR-2)"];
+  claim [label="Atomic claim:\nUPDATE vehicle SET status='sold'\nWHERE id=? AND status='available'"];
+  got [label="1 row updated?", shape=diamond, fillcolor="#fef3c7"];
+  gone [label="'No longer available'", fillcolor="#fecaca"];
+  charge [label="Charge card via gateway  (REQ-PUR-3)"];
+  ok [label="Approved?", shape=diamond, fillcolor="#fef3c7"];
+  rollback [label="ROLLBACK\nvehicle released, show gateway message", fillcolor="#fecaca"];
+  record [label="Create Sale + Invoice  (REQ-SVC-1)\nCancel other pending test drives\nQueue invoice e-mail  (REQ-PUR-5)"];
+  commit [label="COMMIT  - vehicle now 'sold'  (REQ-PUR-4)"];
+  done [label="Show invoice", shape=oval, fillcolor="#bbf7d0"];
+  start -> auth; auth -> deny [label="no"]; auth -> price [label="yes"]; price -> claim; claim -> got;
+  got -> gone [label="no"]; got -> charge [label="yes"]; charge -> ok; ok -> rollback [label="no"]; ok -> record [label="yes"];
+  record -> commit -> done;
+}

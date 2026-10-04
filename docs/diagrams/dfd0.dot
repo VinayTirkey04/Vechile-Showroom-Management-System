@@ -1,0 +1,11 @@
+digraph D0 {
+  graph [rankdir=LR, fontname="Helvetica", bgcolor="white", pad=0.3, nodesep=0.8, ranksep=1.8];
+  node [fontname="Helvetica", fontsize=11]; edge [fontname="Helvetica", fontsize=10, color="#475569"];
+  cust [label="Customer", shape=box]; admin [label="Admin / Dealer", shape=box]; pg [label="Payment\nGateway", shape=box];
+  sys [label="0\nVehicle Showroom\nManagement System", shape=circle, style=filled, fillcolor="#dbeafe", width=1.9];
+  cust -> sys [label="registration, search,\ntest-drive request, order + payment"];
+  sys -> cust [label="vehicle details, booking confirmation,\ninvoice, history"];
+  admin -> sys [label="vehicle data, pricing/tax,\nuser management"];
+  sys -> admin [label="sales & service reports"];
+  sys -> pg [label="charge request"]; pg -> sys [label="approval / decline"];
+}
