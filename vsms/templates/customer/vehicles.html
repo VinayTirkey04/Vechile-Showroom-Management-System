@@ -1,0 +1,29 @@
+{% extends 'base.html' %}{% from '_macros.html' import car_img, badge %}
+{% block title %}Browse vehicles{% endblock %}
+{% block content %}
+<h1>Find your next vehicle</h1>
+<form class="card filters" method="get">
+  <label>Brand<input name="brand" value="{{ args.get('brand','') }}" placeholder="e.g. Hyundai"></label>
+  <label>Model<input name="model" value="{{ args.get('model','') }}" placeholder="e.g. Creta"></label>
+  <label>Category<select name="category"><option value="">All</option>
+    {% for c in categories %}<option {{ 'selected' if args.get('category')==c }}>{{ c }}</option>{% endfor %}</select></label>
+  <label>Min price (₹)<input name="min_price" value="{{ args.get('min_price','') }}" inputmode="numeric"></label>
+  <label>Max price (₹)<input name="max_price" value="{{ args.get('max_price','') }}" inputmode="numeric"></label>
+  <label class="check"><input type="checkbox" name="available" value="1" {{ 'checked' if args.get('available')=='1' }}> Available only</label>
+  <button class="btn">Search</button>
+</form>
+<p class="muted">{{ vehicles|length }} vehicle(s) found</p>
+<div class="cards">
+{% for v in vehicles %}
+  <a class="vcard" href="{{ url_for('customer.vehicle_detail', vehicle_id=v.id) }}">
+    {{ car_img(v) }}
+    <div class="vbody">
+      <div class="vtitle">{{ v.brand }} {{ v.model }} <small>{{ v.variant }}</small></div>
+      <div class="muted">{{ v.year }} · {{ v.category }} · {{ v.fuel_type }}</div>
+      <div class="vfoot"><b>{{ v.price|inr }}</b>{{ badge(v.status) }}</div>
+    </div>
+  </a>
+{% else %}<div class="card">No vehicles match your search.</div>
+{% endfor %}
+</div>
+{% endblock %}
