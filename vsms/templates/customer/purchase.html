@@ -1,0 +1,29 @@
+{% extends 'base.html' %}{% from '_macros.html' import car_img, csrf %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<h1>Checkout</h1>
+<div class="grid2">
+  <div class="card">
+    {{ car_img(v) }}
+    <h3>{{ v.title }}</h3>
+    <table class="kv price">
+      <tr><td>Ex-showroom price</td><td>{{ price.base_price|inr }}</td></tr>
+      <tr><td>Tax ({{ price.tax_rate }}%)</td><td>{{ price.tax_amount|inr }}</td></tr>
+      <tr><td>Handling charges</td><td>{{ price.handling_charge|inr }}</td></tr>
+      <tr class="total"><td>Total payable</td><td>{{ price.total|inr }}</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>Payment</h3>
+    {% if v.is_available %}
+    <form method="post" autocomplete="off">{{ csrf() }}
+      <label>Card number<input name="card_number" inputmode="numeric" placeholder="4242 4242 4242 4242" required></label>
+      <div class="row"><label>Expiry (MM/YY)<input name="expiry" placeholder="12/29" required></label>
+      <label>CVV<input name="cvv" type="password" inputmode="numeric" maxlength="4" required></label></div>
+      <button class="btn block">Pay {{ price.total|inr }}</button>
+    </form>
+    <p class="muted small">Demo gateway: card 4242 4242 4242 4242 is approved, 4000 0000 0000 0002 is declined. Only the last 4 digits are ever stored.</p>
+    {% else %}<div class="alert a-warning">This vehicle is no longer available.</div>{% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}{% from '_macros.html' import badge %}
+{% block title %}My purchases{% endblock %}
+{% block content %}
+<h1>Purchases &amp; service history</h1>
+{% for s in sales %}
+<div class="card">
+  <div class="between"><h3>{{ s.vehicle.title }}</h3>
+  <a class="btn small ghost" href="{{ url_for('customer.invoice', sale_id=s.id) }}">Invoice {{ s.invoice.invoice_number }}</a></div>
+  <p class="muted">Purchased {{ s.created_at.strftime('%d %b %Y') }} · Total {{ s.total|inr }}</p>
+  <h4>Service records</h4>
+  {% if s.service_records %}<table class="table">
+    <tr><th>Date</th><th>Work</th><th>Status</th><th>Cost</th></tr>
+    {% for r in s.service_records %}<tr><td>{{ r.service_date }}</td><td>{{ r.description }}</td><td>{{ badge(r.status) }}</td><td>{{ r.cost|inr }}</td></tr>{% endfor %}
+  </table>{% else %}<p class="muted">No service records yet.</p>{% endif %}
+</div>
+{% else %}<div class="card">You haven't purchased a vehicle yet.</div>
+{% endfor %}
+{% endblock %}

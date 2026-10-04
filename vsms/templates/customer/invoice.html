@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Invoice {{ sale.invoice.invoice_number }}{% endblock %}
+{% block content %}
+<div class="card invoice">
+  <div class="between"><h1>Sales Invoice</h1><div class="right"><b>{{ sale.invoice.invoice_number }}</b><br>
+  <span class="muted">{{ sale.invoice.issued_at.strftime('%d %b %Y') }}</span></div></div>
+  <div class="grid2">
+    <div><h4>Billed to</h4>{{ sale.customer.name }}<br>{{ sale.customer.email }}<br>{{ sale.customer.phone }}</div>
+    <div><h4>Vehicle</h4>{{ sale.vehicle.title }}<br>{{ sale.vehicle.vehicle_number }}<br>{{ sale.vehicle.category }} · {{ sale.vehicle.color }}</div>
+  </div>
+  <table class="table">
+    <tr><th>Description</th><th class="right">Amount</th></tr>
+    <tr><td>Ex-showroom price</td><td class="right">{{ sale.base_price|inr }}</td></tr>
+    <tr><td>Tax ({{ sale.tax_rate }}%)</td><td class="right">{{ sale.tax_amount|inr }}</td></tr>
+    <tr><td>Handling charges</td><td class="right">{{ sale.handling_charge|inr }}</td></tr>
+    <tr class="total"><td>Total paid</td><td class="right">{{ sale.total|inr }}</td></tr>
+  </table>
+  <p class="muted">Payment reference {{ sale.payment_ref }} · card ending {{ sale.card_last4 }}</p>
+  <p><button class="btn ghost" onclick="window.print()">Print</button></p>
+</div>
+{% endblock %}

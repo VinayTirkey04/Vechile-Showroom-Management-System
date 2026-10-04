@@ -1,0 +1,17 @@
+{% extends 'base.html' %}{% from '_macros.html' import badge, csrf %}
+{% block title %}Service records{% endblock %}
+{% block content %}
+<h1>Service records</h1>
+<form class="card filters" method="post">{{ csrf() }}
+<label>Vehicle sale<select name="sale_id">{% for s in sales %}<option value="{{ s.id }}">{{ s.invoice.invoice_number }} – {{ s.vehicle.title }} ({{ s.customer.name }})</option>{% endfor %}</select></label>
+<label>Work description<input name="description" required></label>
+<label>Date<input type="date" name="service_date" value="{{ today }}" required></label>
+<label>Cost (₹)<input name="cost" value="0"></label>
+<button class="btn">Add record</button></form>
+<div class="card nopad"><table class="table"><tr><th>Date</th><th>Vehicle</th><th>Work</th><th>Status</th><th>Cost</th><th></th></tr>
+{% for r in records %}<tr><td>{{ r.service_date }}</td><td>{{ r.sale.vehicle.title }}</td><td>{{ r.description }}</td><td>{{ badge(r.status) }}</td><td>{{ r.cost|inr }}</td>
+<td><form class="inline" method="post" action="{{ url_for('service.update', record_id=r.id) }}">{{ csrf() }}
+<select name="status">{% for st in ['scheduled','in_progress','completed'] %}<option value="{{ st }}" {{ 'selected' if r.status==st }}>{{ st.replace('_',' ') }}</option>{% endfor %}</select>
+<input name="cost" value="{{ r.cost }}" class="tiny"><button class="btn small ghost">Update</button></form></td></tr>
+{% else %}<tr><td colspan="6" class="muted">No service records yet.</td></tr>{% endfor %}</table></div>
+{% endblock %}
